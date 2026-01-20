@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JobPulse.Core.Services
 {
-    internal class LinkedInScraper
+    public class LinkedInScraper
     {
     }
 }

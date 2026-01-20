@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JobPulse.Core.Models
 {
-    internal class SearchRequest
+    public class SearchRequest
     {
     }
 }

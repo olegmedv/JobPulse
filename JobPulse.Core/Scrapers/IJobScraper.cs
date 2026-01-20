@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JobPulse.Core.Scrapers
 {
-    internal interface IJobScraper
+    public interface IJobScraper
     {
     }
 }
