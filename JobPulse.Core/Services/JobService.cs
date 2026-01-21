@@ -32,7 +32,24 @@ namespace JobPulse.Core.Services
         /// <returns>Combined list of jobs</returns>
         public async Task<List<Job>> SearchAsync(SearchRequest request)
         {
-            return null;
+            var allJobs = new List<Job>();
+            var scrapeTasks = _scrapers.Select(scraper => scraper.ScrapeAsync(request)).ToList();
+            foreach (var scraper in scrapeTasks)
+            {
+                try
+                {
+                    var jobs = await scraper;
+                    if (jobs != null)
+                    {
+                        allJobs.AddRange(jobs);
+                    }
+                }
+                catch
+                {
+                    // Log error (omitted for brevity), continue with other scrapers
+                }
+            }
+            return allJobs;
         }
     }
 }
