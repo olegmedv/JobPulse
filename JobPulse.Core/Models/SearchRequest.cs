@@ -25,5 +25,15 @@ namespace JobPulse.Core.Models
         /// How many results to return (default 25)
         /// </summary>
         public int ResultsWanted { get; set; } = 25;
+
+        /// <summary>
+        /// Filter by posting age in hours (24=day, 168=week)
+        /// </summary>
+        public int? HoursOld { get; set; }
+
+        /// <summary>
+        /// Filter for remote jobs only
+        /// </summary>
+        public bool? IsRemote { get; set; }
     }
 }

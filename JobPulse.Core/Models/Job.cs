@@ -50,5 +50,20 @@ namespace JobPulse.Core.Models
         /// Job description (optional, for detailed view)
         /// </summary>
         public string? Description { get; set; }
+
+        /// <summary>
+        /// Is this a remote position?
+        /// </summary>
+        public bool? IsRemote { get; set; }
+
+        /// <summary>
+        /// Minimum salary (if available)
+        /// </summary>
+        public decimal? SalaryMin { get; set; }
+
+        /// <summary>
+        /// Maximum salary (if available)
+        /// </summary>
+        public decimal? SalaryMax { get; set; }
     }
 }
