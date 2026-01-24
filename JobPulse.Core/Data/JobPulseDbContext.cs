@@ -11,6 +11,8 @@ public class JobPulseDbContext : DbContext
     }
 
     public DbSet<Job> Jobs { get; set; }
+    public DbSet<UserPreferences> UserPreferences { get; set; }
+    public DbSet<UserNotifiedJob> UserNotifiedJobs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -31,6 +33,32 @@ public class JobPulseDbContext : DbContext
             entity.Property(e => e.IsRemote).HasColumnName("is_remote");
             entity.Property(e => e.SalaryMin).HasColumnName("salary_min");
             entity.Property(e => e.SalaryMax).HasColumnName("salary_max");
+        });
+
+        modelBuilder.Entity<UserPreferences>(entity =>
+        {
+            entity.ToTable("user_preferences");
+            entity.HasKey(e => e.UserId);
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.Property(e => e.Email).HasColumnName("email").IsRequired();
+            entity.Property(e => e.Keywords).HasColumnName("keywords").IsRequired();
+            entity.Property(e => e.Location).HasColumnName("location");
+            entity.Property(e => e.IsRemote).HasColumnName("is_remote");
+            entity.Property(e => e.FilterKeywords).HasColumnName("filter_keywords");
+            entity.Property(e => e.NotificationsEnabled).HasColumnName("notifications_enabled");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+        });
+
+        modelBuilder.Entity<UserNotifiedJob>(entity =>
+        {
+            entity.ToTable("user_notified_jobs");
+            entity.HasKey(e => new { e.UserId, e.JobId });
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.Property(e => e.JobId).HasColumnName("job_id");
+            entity.Property(e => e.NotifiedAt).HasColumnName("notified_at");
+            entity.HasOne(e => e.Job)
+                  .WithMany()
+                  .HasForeignKey(e => e.JobId);
         });
     }
 }
