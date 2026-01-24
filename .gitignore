@@ -487,3 +487,6 @@ tmp*
 nul
 vscode/
 .vscode/
+
+# Local settings with secrets
+appsettings.Development.json
