@@ -1,5 +1,6 @@
-import { AntdInferencer } from "@refinedev/inferencer/antd";
+// import { AntdInferencer } from "@refinedev/inferencer/antd";
 
 export const JobsList = () => {
-    return <AntdInferencer />;
+    // return <AntdInferencer />;
+    return <div>Jobs List - Coming Soon</div>;
 };
