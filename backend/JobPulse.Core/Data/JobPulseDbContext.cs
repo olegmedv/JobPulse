@@ -33,6 +33,7 @@ public class JobPulseDbContext : DbContext
             entity.Property(e => e.IsRemote).HasColumnName("is_remote");
             entity.Property(e => e.SalaryMin).HasColumnName("salary_min");
             entity.Property(e => e.SalaryMax).HasColumnName("salary_max");
+            entity.Property(e => e.EasyApply).HasColumnName("easy_apply");
         });
 
         modelBuilder.Entity<UserPreferences>(entity =>

@@ -47,7 +47,7 @@ namespace JobPulse.Core.Services
             if (html.Length < 100)
                 return new List<Job>();
 
-            var jobList = ParseJobs(html);
+            var jobList = ParseJobs(html, request.IsRemote);
 
             return jobList;
         }
@@ -56,7 +56,7 @@ namespace JobPulse.Core.Services
         /// <summary>
         /// Parses the HTML response into a list of Job objects.
         /// </summary>
-        private List<Job> ParseJobs(string html)
+        private List<Job> ParseJobs(string html, bool? isRemote)
         {
             var jobs = new List<Job>();
             var seenIds = new HashSet<string>();
@@ -75,7 +75,7 @@ namespace JobPulse.Core.Services
             {
                 try
                 {
-                    var job = ParseJobCard(card, seenIds);
+                    var job = ParseJobCard(card, seenIds, isRemote);
                     if (job != null)
                         jobs.Add(job);
                 }
@@ -92,7 +92,7 @@ namespace JobPulse.Core.Services
         /// Parses one job card from HTML into a Job object.
         /// XPath selectors from JobSpyNet reference project.
         /// </summary>
-        private Job? ParseJobCard(HtmlNode card, HashSet<string> seenIds)
+        private Job? ParseJobCard(HtmlNode card, HashSet<string> seenIds, bool? isRemote)
         {
             // 1. Job link — contains the job ID in URL
             var linkNode = card.SelectSingleNode(
@@ -152,7 +152,7 @@ namespace JobPulse.Core.Services
                 Url = $"{BaseUrl}/jobs/view/{jobId}",
                 Source = Source,
                 DatePosted = datePosted,
-                IsRemote = null,
+                IsRemote = isRemote,
                 EasyApply = null,
                 SalaryMin = salaryMin,
                 SalaryMax = salaryMax
