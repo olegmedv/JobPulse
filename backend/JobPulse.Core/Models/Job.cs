@@ -57,6 +57,11 @@ namespace JobPulse.Core.Models
         public bool? IsRemote { get; set; }
 
         /// <summary>
+        /// Is this an Easy Apply job? (apply via LinkedIn)
+        /// </summary>
+        public bool? EasyApply { get; set; }
+
+        /// <summary>
         /// Minimum salary (if available)
         /// </summary>
         public decimal? SalaryMin { get; set; }

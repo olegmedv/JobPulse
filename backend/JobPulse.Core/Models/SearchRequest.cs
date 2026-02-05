@@ -35,5 +35,6 @@ namespace JobPulse.Core.Models
         /// Filter for Easy Apply jobs only
         /// </summary>
         public bool? EasyApply { get; set; }
+
     }
 }

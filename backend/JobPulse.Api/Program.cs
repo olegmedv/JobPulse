@@ -16,10 +16,6 @@ builder.Services.AddDbContext<JobPulseDbContext>(options =>
 builder.Services.AddControllers();
 
 // Register HttpClient for scrapers
-// AddHttpClient creates HttpClient factory with proper lifecycle
-builder.Services.AddHttpClient<IJobScraper, LinkedInScraper>();
-
-// Register HttpClient for scrapers
 // AutomaticDecompression handles gzip/deflate responses from LinkedIn
 builder.Services.AddHttpClient<IJobScraper, LinkedInScraper>()
     .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
