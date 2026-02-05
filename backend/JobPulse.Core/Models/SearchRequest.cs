@@ -22,18 +22,18 @@ namespace JobPulse.Core.Models
         public string Location { get; set; } = string.Empty;
 
         /// <summary>
-        /// How many results to return (default 25)
+        /// Filter by posting age in minutes (60=1hour, 30=30min)
         /// </summary>
-        public int ResultsWanted { get; set; } = 25;
-
-        /// <summary>
-        /// Filter by posting age in hours (24=day, 168=week)
-        /// </summary>
-        public int? HoursOld { get; set; }
+        public int MinutesOld { get; set; } = 30;
 
         /// <summary>
         /// Filter for remote jobs only
         /// </summary>
         public bool? IsRemote { get; set; }
+
+        /// <summary>
+        /// Filter for Easy Apply jobs only
+        /// </summary>
+        public bool? EasyApply { get; set; }
     }
 }
