@@ -70,5 +70,30 @@ namespace JobPulse.Core.Models
         /// Maximum salary (if available)
         /// </summary>
         public decimal? SalaryMax { get; set; }
+
+        /// <summary>
+        /// Employment type: Full-time, Part-time, Contract, etc.
+        /// </summary>
+        public string? JobType { get; set; }
+
+        /// <summary>
+        /// Seniority level: Entry, Mid-Senior, Director, etc.
+        /// </summary>
+        public string? JobLevel { get; set; }
+
+        /// <summary>
+        /// Company industry: IT Services, Healthcare, etc.
+        /// </summary>
+        public string? Industry { get; set; }
+
+        /// <summary>
+        /// Job function: Engineering, Sales, Marketing, etc.
+        /// </summary>
+        public string? JobFunction { get; set; }
+
+        /// <summary>
+        /// External apply URL (if not Easy Apply)
+        /// </summary>
+        public string? DirectApplyUrl { get; set; }
     }
 }

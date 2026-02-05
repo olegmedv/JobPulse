@@ -34,6 +34,11 @@ public class JobPulseDbContext : DbContext
             entity.Property(e => e.SalaryMin).HasColumnName("salary_min");
             entity.Property(e => e.SalaryMax).HasColumnName("salary_max");
             entity.Property(e => e.EasyApply).HasColumnName("easy_apply");
+            entity.Property(e => e.JobType).HasColumnName("job_type");
+            entity.Property(e => e.JobLevel).HasColumnName("job_level");
+            entity.Property(e => e.Industry).HasColumnName("industry");
+            entity.Property(e => e.JobFunction).HasColumnName("job_function");
+            entity.Property(e => e.DirectApplyUrl).HasColumnName("direct_apply_url");
         });
 
         modelBuilder.Entity<UserPreferences>(entity =>
