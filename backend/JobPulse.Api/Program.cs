@@ -3,6 +3,7 @@ using JobPulse.Core.Scrapers;
 using JobPulse.Core.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,16 @@ builder.Services.AddControllers();
 // Register HttpClient for scrapers
 // AddHttpClient creates HttpClient factory with proper lifecycle
 builder.Services.AddHttpClient<IJobScraper, LinkedInScraper>();
+
+// Register HttpClient for scrapers
+// AutomaticDecompression handles gzip/deflate responses from LinkedIn
+builder.Services.AddHttpClient<IJobScraper, LinkedInScraper>()
+    .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+    {
+        AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+        UseCookies = true,
+        CookieContainer = new CookieContainer()
+    });
 
 // Register JobService
 // AddScoped = new instance for each HTTP request
