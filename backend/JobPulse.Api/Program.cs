@@ -1,3 +1,5 @@
+using Hangfire;
+using Hangfire.Storage.SQLite;
 using JobPulse.Core.Data;
 using JobPulse.Core.Scrapers;
 using JobPulse.Core.Services;
@@ -28,6 +30,9 @@ builder.Services.AddHttpClient<IJobScraper, LinkedInScraper>()
 // Register JobService
 // AddScoped = new instance for each HTTP request
 builder.Services.AddScoped<JobService>();
+
+// Register background service for Hangfire
+builder.Services.AddScoped<JobSearchBackgroundService>();
 
 // ============================================================================
 // JWT AUTHENTICATION SETUP
@@ -63,11 +68,29 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddEndpointsApiExplorer();  // Required for Swagger
 builder.Services.AddSwaggerGen();             // Generates API documentation
 
+// ============================================================================
+// HANGFIRE BACKGROUND JOBS
+// ============================================================================
+// Uses separate SQLite database for job storage (not the main PostgreSQL)
+// Dashboard available at /hangfire for monitoring jobs
+// ============================================================================
+builder.Services.AddHangfire(config => config
+    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UseSQLiteStorage("hangfire.db"));
+
+builder.Services.AddHangfireServer();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline
 app.UseSwagger();      // Serves swagger.json
 app.UseSwaggerUI();    // Serves Swagger UI at /swagger
+
+// Hangfire Dashboard at /hangfire
+// Shows job queues, scheduled jobs, failed jobs, etc.
+app.UseHangfireDashboard();
 
 app.UseHttpsRedirection();
 
@@ -92,5 +115,17 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// ============================================================================
+// HANGFIRE RECURRING JOBS
+// ============================================================================
+// Schedule background job search every 30 minutes
+// Matches default MinutesOld=30 in SearchRequest
+// Cron: "*/30 * * * *" = at minute 0 and 30 of every hour
+// ============================================================================
+RecurringJob.AddOrUpdate<JobSearchBackgroundService>(
+    "job-search-30min",
+    service => service.SearchForAllUsersAsync(),
+    "*/30 * * * *");
 
 app.Run();
