@@ -26,10 +26,11 @@ namespace JobPulse.Core.Services
         }
 
         /// <summary>
-        /// Searches for jobs across all sources
+        /// Searches for jobs across all sources.
+        /// Applies tech-stack filtering based on keywords.
         /// </summary>
         /// <param name="request">Search parameters</param>
-        /// <returns>Combined list of jobs</returns>
+        /// <returns>Filtered list of jobs matching tech keywords</returns>
         public async Task<List<Job>> SearchAsync(SearchRequest request)
         {
             var allJobs = new List<Job>();
@@ -49,6 +50,18 @@ namespace JobPulse.Core.Services
                     // Log error (omitted for brevity), continue with other scrapers
                 }
             }
+
+            // Build filter set from user's keywords (e.g., "C#" → [c#, csharp, .net, dotnet, ...])
+            var filterSet = TechGroups.BuildFilterSet(request.Keywords);
+
+            // If tech keywords found, filter jobs by description
+            if (filterSet.Count > 0)
+            {
+                allJobs = allJobs
+                    .Where(job => TechGroups.MatchesFilter(filterSet, job.Title, job.Description))
+                    .ToList();
+            }
+
             return allJobs;
         }
     }
